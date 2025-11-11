@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Send Data to Firebase</title>
+  <style>
+    /* Google Font */
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: #fff;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+      width: 300px;
+    }
+
+    h2 {
+      margin-bottom: 30px;
+      font-size: 1.8rem;
+    }
+
+    #sendBtn {
+      background: linear-gradient(90deg, #ff6a00, #ee0979);
+      border: none;
+      padding: 15px 30px;
+      font-size: 1rem;
+      color: #fff;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #sendBtn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    #sendBtn:active {
+      transform: translateY(0);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Send Data to Firebase</h2>
+    <button id="sendBtn">Send Data</button>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+    import { getDatabase, ref, set, push } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAthTrs9U6ZVOX1Mjpo2ytxbJQNkpfGCnw",
+      authDomain: "test-9266e.firebaseapp.com",
+      databaseURL: "https://test-9266e-default-rtdb.firebaseio.com",
+      projectId: "test-9266e",
+      storageBucket: "test-9266e.firebasestorage.app",
+      messagingSenderId: "268684198071",
+      appId: "1:268684198071:web:13b38507b00da8562d4d32",
+      measurementId: "G-PYCDCN10K2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getDatabase(app);
+
+    const sendBtn = document.getElementById("sendBtn");
+
+    sendBtn.addEventListener("click", () => {
+      const data = {
+        name: "Cing",
+        timestamp: new Date().toISOString()
+      };
+
+      const newDataRef = push(ref(db, 'users'));
+      set(newDataRef, data)
+        .then(() => {
+          alert("Data sent successfully!");
+        })
+        .catch((error) => {
+          alert("Error sending data: " + error);
+        });
+    });
+  </script>
+</body>
+</html>
