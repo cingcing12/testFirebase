@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Send Data to Firebase</title>
   <style>
-    /* Google Font */
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
     body {
@@ -46,15 +45,17 @@
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     }
 
-    #sendBtn:hover {
+    #sendBtn:disabled {
+      background: gray;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    #sendBtn:hover:enabled {
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     }
 
-    #sendBtn:active {
-      transform: translateY(0);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
   </style>
 </head>
 <body>
@@ -85,6 +86,12 @@
 
     const sendBtn = document.getElementById("sendBtn");
 
+    // Disable button if already sent
+    if(localStorage.getItem("sentToFirebase")) {
+      sendBtn.disabled = true;
+      sendBtn.innerText = "Already Sent";
+    }
+
     sendBtn.addEventListener("click", () => {
       const data = {
         name: "Cing",
@@ -95,6 +102,9 @@
       set(newDataRef, data)
         .then(() => {
           alert("Data sent successfully!");
+          sendBtn.disabled = true;
+          sendBtn.innerText = "Already Sent";
+          localStorage.setItem("sentToFirebase", "true"); // Save flag
         })
         .catch((error) => {
           alert("Error sending data: " + error);
